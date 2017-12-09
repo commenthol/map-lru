@@ -1,0 +1,3 @@
+--check-leaks
+--require babel-polyfill
+--require babel-register

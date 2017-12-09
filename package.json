@@ -1,0 +1,41 @@
+{
+  "name": "map-lru",
+  "version": "1.0.0-0",
+  "description": "\"Least Recently Used\" (LRU) cache compatible to ES6 Map",
+  "keywords": [
+    "cache",
+    "caching",
+    "fast",
+    "least",
+    "lru",
+    "map",
+    "recently",
+    "used"
+  ],
+  "license": "Unlicense",
+  "author": "commenthol <commenthol@gmail.com>",
+  "main": "index.js",
+  "module": "index.es.js",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "babel -o index.js index.es.js",
+    "lint": "standard -v --fix **/*.js",
+    "test": "nyc -r text mocha"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "mocha": "^4.0.1",
+    "nyc": "^11.3.0"
+  },
+  "engines": {
+    "node": ">=4"
+  }
+}
