@@ -6,3 +6,4 @@ tmp/
 *.tgz
 yarn.lock
 package-lock.json
+.coveralls.yml
