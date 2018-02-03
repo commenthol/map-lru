@@ -1,6 +1,6 @@
 {
   "name": "map-lru",
-  "version": "1.0.0",
+  "version": "1.0.1-0",
   "description": "\"Least Recently Used\" (LRU) cache compatible to ES6 Map",
   "keywords": [
     "cache",
@@ -12,30 +12,45 @@
     "recently",
     "used"
   ],
+  "homepage": "https://github.com/commenthol/map-lru#readme",
+  "bugs": {
+    "url": "https://github.com/commenthol/map-lru/issues"
+  },
   "license": "Unlicense",
   "author": "commenthol <commenthol@gmail.com>",
   "main": "index.js",
   "module": "index.es.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/commenthol/map-lru.git"
+  },
   "scripts": {
-    "prepublishOnly": "npm run build",
-    "build": "babel -o index.js index.es.js",
+    "all": "npm run lint && npm run build && npm run test",
+    "build": "babel -o index.js index.es.js && echo 'module.exports = MapLRU;' >> index.js",
+    "clean": "rimraf index.js coverage .nyc_output node_modules",
+    "coverage": "nyc -r text -r html mocha",
+    "coveralls": "npm test && nyc report --reporter=text-lcov | coveralls",
     "lint": "standard -v --fix **/*.js",
-    "test": "nyc -r text mocha",
-    "coveralls": "npm test && nyc report --reporter=text-lcov | coveralls"
+    "prepublishOnly": "npm run build",
+    "test": "nyc -r text mocha"
   },
   "babel": {
     "presets": [
       "env"
     ]
   },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
-    "coveralls": "^3.0.0",
-    "mocha": "^4.0.1",
-    "nyc": "^11.3.0"
+    "coveralls": "^3.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^12.0.2"
   },
   "engines": {
     "node": ">=4"

@@ -3,6 +3,9 @@
 import MapLRU from '../index.es.js'
 import assert from 'assert'
 
+// const MapLRU = require('../index.js')
+// const assert = require('assert')
+
 describe('#MapLRU', function () {
   it('should throw with TypeError', function () {
     assert.throws(() => {
