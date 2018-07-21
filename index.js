@@ -207,4 +207,3 @@ var MapLRU = function () {
 }();
 
 exports.default = MapLRU;
-module.exports = MapLRU;

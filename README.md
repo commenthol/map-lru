@@ -18,7 +18,8 @@ $ npm install map-lru
 ## Usage
 
 ```js
-import MapLRU from 'map-lru'
+import MapLRU from 'map-lru' // ES5
+// const MapLRU = require('map-lru').default // commonJs
 const cache = new MapLRU(10)
 
 cache.set('♥', '♥♥♥')
@@ -32,6 +33,7 @@ cache.last
 cache.size
 //=> 1
 ```
+
 
 ## API
 

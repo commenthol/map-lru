@@ -29,7 +29,7 @@
   },
   "scripts": {
     "all": "npm run lint && npm run build && npm run test",
-    "build": "babel -o index.js index.es.js && echo 'module.exports = MapLRU;' >> index.js",
+    "build": "babel -o index.js index.es.js",
     "clean": "rimraf index.js coverage .nyc_output node_modules",
     "coverage": "nyc -r text -r html mocha",
     "coveralls": "npm test && nyc report --reporter=text-lcov | coveralls",
