@@ -17,24 +17,42 @@ var MapLRU = function () {
     _classCallCheck(this, MapLRU);
 
     if (typeof maxSize !== 'number') throw TypeError('maxSize needs to be a number');
-    Object.assign(this, {
-      maxSize: maxSize,
-      _lastKey: void 0,
-      _set: new Set(),
-      _map: new Map() // unfortunately we can't extend `Map`
-    });
-    /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach
-    */
-    this.forEach = this._map.forEach.bind(this._map);
+
+    this.maxSize = maxSize;
+    this._keys = new Array(maxSize);
+    this._next = new Float64Array(maxSize);
+    this._prev = new Float64Array(maxSize);
+    this._lastKey = undefined;
+    this.clear();
   }
 
-  /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size
-  */
-
-
   _createClass(MapLRU, [{
+    key: '_move',
+    value: function _move(pointer) {
+      var oldHead = this._head;
+
+      if (oldHead === pointer) return;
+
+      var prev = this._prev[pointer];
+      var next = this._next[pointer];
+
+      if (this._tail === pointer) {
+        this._tail = prev;
+      } else {
+        this._prev[next] = prev;
+      }
+
+      this._prev[oldHead] = pointer;
+      this._head = pointer;
+      this._next[prev] = next;
+      this._next[pointer] = oldHead;
+    }
+
+    /**
+    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size
+    */
+
+  }, {
     key: 'get',
 
 
@@ -42,13 +60,13 @@ var MapLRU = function () {
     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
     */
     value: function get(key) {
-      if (key === this._lastKey) {
-        return this._map.get(key);
-      } else if (this._set.delete(key)) {
-        this._set.add(key);
-        this._lastKey = key;
-        return this._map.get(key);
-      }
+      var pointer = this._pointers.get(key);
+
+      if (typeof pointer === 'undefined') return;
+
+      this._move(pointer);
+      this._lastKey = key;
+      return this._map.get(key);
     }
 
     /**
@@ -59,6 +77,11 @@ var MapLRU = function () {
   }, {
     key: 'peek',
     value: function peek(key) {
+      var pointer = this._pointers.get(key);
+
+      if (typeof pointer === 'undefined') return;
+
+      this._lastKey = key;
       return this._map.get(key);
     }
 
@@ -69,37 +92,29 @@ var MapLRU = function () {
   }, {
     key: 'set',
     value: function set(key, value) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var pointer = this._pointers.get(key);
+      this._lastKey = key;
 
-      try {
-        for (var _iterator = this._set[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _key = _step.value;
-
-          if (this.size < this.maxSize) {
-            break;
-          }
-          this.delete(_key);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
+      if (typeof pointer !== 'undefined') {
+        this._move(pointer);
+        this._map.set(key, value);
+        return this;
+      } else if (this._size < this.maxSize) {
+        pointer = this._size++;
+      } else {
+        pointer = this._tail;
+        this._tail = this._prev[pointer];
+        this._pointers.delete(this._keys[pointer]);
       }
 
-      this._lastKey = key;
-      this._set.add(key);
+      this._pointers.set(key, pointer);
+      this._keys[pointer] = key;
       this._map.set(key, value);
+
+      this._next[pointer] = this._head;
+      this._prev[this._head] = pointer;
+      this._head = pointer;
+
       return this;
     }
 
@@ -110,8 +125,11 @@ var MapLRU = function () {
   }, {
     key: 'clear',
     value: function clear() {
-      this._set.clear();
-      this._map.clear();
+      this._size = 0;
+      this._head = 0;
+      this._tail = 0;
+      this._pointers = new Map();
+      this._map = new Map();
     }
 
     /**
@@ -121,8 +139,19 @@ var MapLRU = function () {
   }, {
     key: 'delete',
     value: function _delete(key) {
-      this._set.delete(key);
-      return this._map.delete(key);
+      var pointer = this._pointers.get(key);
+
+      if (typeof pointer === 'undefined') return false;
+
+      var next = this._next[pointer];
+      var prev = this._prev[pointer];
+      this._next[prev] = next;
+      this._prev[next] = prev;
+      this._pointers.delete(key);
+      this._map.delete(key);
+      this._size -= 1;
+
+      return true;
     }
 
     /**
@@ -132,7 +161,7 @@ var MapLRU = function () {
   }, {
     key: 'has',
     value: function has(key) {
-      return this._map.has(key);
+      return this._pointers.has(key);
     }
 
     /**
@@ -142,7 +171,7 @@ var MapLRU = function () {
   }, {
     key: 'keys',
     value: function keys() {
-      return this._map.keys();
+      return this._pointers.keys();
     }
 
     /**
@@ -153,7 +182,16 @@ var MapLRU = function () {
   }, {
     key: 'keysAccessed',
     value: function keysAccessed() {
-      return this._set.values();
+      var keys = new Set();
+      if (this._size) {
+        var pointer = this._tail;
+        keys.add(this._keys[pointer]);
+        while (pointer !== this._head) {
+          pointer = this._prev[pointer];
+          keys.add(this._keys[pointer]);
+        }
+      }
+      return keys;
     }
 
     /**
@@ -175,20 +213,20 @@ var MapLRU = function () {
     value: function entries() {
       return this._map.entries();
     }
+  }, {
+    key: Symbol.iterator,
+
 
     /**
     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/@@iterator
     */
-
-  }, {
-    key: Symbol.iterator,
     value: function value() {
       return this._map[Symbol.iterator]();
     }
   }, {
     key: 'size',
     get: function get() {
-      return this._map.size;
+      return this._size;
     }
 
     /**
@@ -200,6 +238,12 @@ var MapLRU = function () {
     key: 'last',
     get: function get() {
       return this._lastKey;
+    }
+  }, {
+    key: 'forEach',
+    get: function get() {
+      var map = this._map;
+      return map.forEach.bind(map);
     }
   }]);
 

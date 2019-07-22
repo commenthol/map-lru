@@ -3,7 +3,7 @@
 import MapLRU from '../index.es.js'
 import assert from 'assert'
 
-// const MapLRU = require('../index.js')
+// const MapLRU = require('../index.js').default
 // const assert = require('assert')
 
 describe('#MapLRU', function () {
@@ -15,34 +15,35 @@ describe('#MapLRU', function () {
 
   it('should create a LRU-Cache', function () {
     const cache = new MapLRU(10)
-    assert.equal(cache.maxSize, 10)
-    assert.equal(cache.size, 0)
-    assert.deepEqual(cache.entries(), {})
+    assert.strictEqual(cache.maxSize, 10)
+    assert.strictEqual(cache.size, 0)
+    assert.deepStrictEqual(Array.from(cache.entries()), [])
+    assert.deepStrictEqual([...cache.keysAccessed()], [])
   })
 
   it('should create a maxSize-ed LRU-Cache', function () {
     const cache = new MapLRU(3)
-    assert.equal(cache.maxSize, 3)
-    assert.equal(cache.size, 0)
-    assert.deepEqual(Array.from(cache.entries()), [])
+    assert.strictEqual(cache.maxSize, 3)
+    assert.strictEqual(cache.size, 0)
+    assert.deepStrictEqual(Array.from(cache.entries()), [])
   })
 
   it('should add one entry', function () {
     const cache = new MapLRU(3)
     cache.set('a', 'aa')
-    assert.equal(cache.size, 1)
+    assert.strictEqual(cache.size, 1)
     assert.strictEqual(cache.get('a'), 'aa')
-    assert.deepEqual(Array.from(cache.entries()), [ [ 'a', 'aa' ] ])
-    assert.deepEqual(Array.from(cache.keys()), [ 'a' ])
-    assert.deepEqual(Array.from(cache.values()), [ 'aa' ])
+    assert.deepStrictEqual(Array.from(cache.entries()), [['a', 'aa']])
+    assert.deepStrictEqual(Array.from(cache.keys()), ['a'])
+    assert.deepStrictEqual(Array.from(cache.values()), ['aa'])
   })
 
   it('should set and return entries', function () {
     const cache = new MapLRU(10)
-    cache.set('a', 'aa').set('b', {bb: 1})
+    cache.set('a', 'aa').set('b', { bb: 1 })
     assert.strictEqual(cache.has('a'), true)
     assert.strictEqual(cache.get('a'), 'aa')
-    assert.deepEqual(cache.get('b'), {bb: 1})
+    assert.deepStrictEqual(cache.get('b'), { bb: 1 })
     assert.strictEqual(cache.get('c'), undefined)
     assert.strictEqual(cache.last, 'b')
   })
@@ -51,13 +52,14 @@ describe('#MapLRU', function () {
     const cache = new MapLRU(10)
     cache.set('a', 1).set('b', 2)
     assert.strictEqual(cache.size, 2)
-    assert.deepEqual(Array.from(cache.keys()), ['a', 'b'])
-    cache.delete('a')
+    assert.deepStrictEqual(Array.from(cache.keys()), ['a', 'b'])
+    assert.strictEqual(cache.delete('a'), true)
     assert.strictEqual(cache.size, 1)
-    assert.deepEqual(Array.from(cache.keys()), ['b'])
+    assert.deepStrictEqual(Array.from(cache.keys()), ['b'])
     cache.delete('b')
     assert.strictEqual(cache.size, 0)
-    assert.deepEqual(Array.from(cache.keys()), [])
+    assert.deepStrictEqual(Array.from(cache.keys()), [])
+    assert.strictEqual(cache.delete('z'), false)
   })
 
   it('should clear cache', function () {
@@ -72,7 +74,8 @@ describe('#MapLRU', function () {
     const cache = new MapLRU(10)
     const a = [['a', 1], ['b', 2], ['c', 3], ['a', 4]]
     a.forEach((entry) => cache.set(...entry))
-    assert.deepEqual(Array.from(cache.entries()), [['a', 4], ['b', 2], ['c', 3]])
+    // console.log(cache)
+    assert.deepStrictEqual(Array.from(cache.entries()), [['a', 4], ['b', 2], ['c', 3]])
     assert.strictEqual(cache.last, 'a')
   })
 
@@ -80,7 +83,8 @@ describe('#MapLRU', function () {
     const cache = new MapLRU(2)
     const a = [['a', 1], ['b', 2], ['a', 4]]
     a.forEach((entry) => cache.set(...entry))
-    assert.deepEqual(Array.from(cache.entries()), [['b', 2], ['a', 4]])
+    // console.log(cache)
+    assert.deepStrictEqual(Array.from(cache.entries()), [['a', 4], ['b', 2]])
     assert.strictEqual(cache.last, 'a')
   })
 
@@ -90,7 +94,7 @@ describe('#MapLRU', function () {
     a.forEach((entry) => cache.set(...entry))
     let i = 0
     for (const entry of cache) {
-      assert.deepEqual(entry, a[i++])
+      assert.deepStrictEqual(entry, a[i++])
     }
   })
 
@@ -110,7 +114,14 @@ describe('#MapLRU', function () {
     cache.set('b', 'bb')
     cache.set('c', 'cc')
     assert.strictEqual(cache.size, 2)
-    assert.deepEqual(Array.from(cache.keys()), ['b', 'c'])
+    assert.deepStrictEqual(Array.from(cache.keys()), ['b', 'c'])
+  })
+
+  it('should return keys accessed', function () {
+    const cache = new MapLRU(3)
+    cache.set('a', 1)
+    cache.set('a', 2)
+    assert.deepStrictEqual([...cache.keysAccessed()], ['a'])
   })
 
   it('should drop last used entry', function () {
@@ -122,8 +133,9 @@ describe('#MapLRU', function () {
     cache.set('d', 4)
     assert.strictEqual(cache.get('a'), 1)
     cache.set('e', 5)
-    assert.deepEqual([...cache.keys()], [ 'a', 'd', 'e' ])
-    assert.deepEqual([...cache.keysAccessed()], [ 'd', 'a', 'e' ])
+    // console.log(cache)
+    assert.deepStrictEqual([...cache.keys()], ['a', 'd', 'e'])
+    assert.deepStrictEqual([...cache.keysAccessed()], ['d', 'a', 'e'])
   })
 
   it('should peek without changing last', function () {
@@ -135,6 +147,6 @@ describe('#MapLRU', function () {
     cache.set('d', 4)
     assert.strictEqual(cache.peek('a'), undefined)
     cache.set('e', 5)
-    assert.deepEqual(Array.from(cache.keys()), [ 'c', 'd', 'e' ])
+    assert.deepStrictEqual(Array.from(cache.keys()), ['c', 'd', 'e'])
   })
 })
