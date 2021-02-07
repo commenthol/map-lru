@@ -10,9 +10,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var MapLRU = function () {
   /**
-  * @constructor
-  * @param {Number} maxSize - max. size of the LRU cache
-  */
+   * @constructor
+   * @param {Number} maxSize - max. size of the LRU cache
+   */
   function MapLRU(maxSize) {
     _classCallCheck(this, MapLRU);
 
@@ -49,16 +49,16 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size
+     */
 
   }, {
     key: 'get',
 
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
+     */
     value: function get(key) {
       var pointer = this._pointers.get(key);
 
@@ -70,9 +70,9 @@ var MapLRU = function () {
     }
 
     /**
-    * Get an item without marking it as recently used
-    * @param {Any} key
-    */
+     * Get an item without marking it as recently used
+     * @param {Any} key
+     */
 
   }, {
     key: 'peek',
@@ -86,8 +86,8 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set
+     */
 
   }, {
     key: 'set',
@@ -119,8 +119,8 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear
+     */
 
   }, {
     key: 'clear',
@@ -133,8 +133,8 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete
+     */
 
   }, {
     key: 'delete',
@@ -155,8 +155,8 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has
+     */
 
   }, {
     key: 'has',
@@ -165,8 +165,8 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys
+     */
 
   }, {
     key: 'keys',
@@ -175,9 +175,9 @@ var MapLRU = function () {
     }
 
     /**
-    * keys in order of access - last one is most recently used one
-    * @return {Iterator} Iterator object
-    */
+     * keys in order of access - last one is most recently used one
+     * @return {Iterator} Iterator object
+     */
 
   }, {
     key: 'keysAccessed',
@@ -195,8 +195,8 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values
+     */
 
   }, {
     key: 'values',
@@ -205,8 +205,8 @@ var MapLRU = function () {
     }
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries
+     */
 
   }, {
     key: 'entries',
@@ -218,8 +218,8 @@ var MapLRU = function () {
 
 
     /**
-    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/@@iterator
-    */
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/@@iterator
+     */
     value: function value() {
       return this._map[Symbol.iterator]();
     }
@@ -230,9 +230,9 @@ var MapLRU = function () {
     }
 
     /**
-    * returns the last accessed key
-    * @return {Any}
-    */
+     * returns the last accessed key
+     * @return {Any}
+     */
 
   }, {
     key: 'last',
