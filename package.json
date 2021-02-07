@@ -16,16 +16,16 @@
   "bugs": {
     "url": "https://github.com/commenthol/map-lru/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/commenthol/map-lru.git"
+  },
   "license": "Unlicense",
   "author": "commenthol <commenthol@gmail.com>",
   "main": "index.js",
   "module": "index.es.js",
   "directories": {
     "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/commenthol/map-lru.git"
   },
   "scripts": {
     "all": "npm run lint && npm run build && npm run test",
@@ -42,16 +42,23 @@
       "env"
     ]
   },
+  "mocha": {
+    "checkLeaks": true,
+    "require": [
+      "babel-polyfill",
+      "babel-register"
+    ]
+  },
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
-    "coveralls": "^3.0.2",
-    "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
-    "standard": "^13.1.0"
+    "coveralls": "^3.1.0",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0",
+    "standard": "^16.0.3"
   },
   "engines": {
     "node": ">=4"
