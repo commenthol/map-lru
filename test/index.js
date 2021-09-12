@@ -1,10 +1,11 @@
 /* global describe, it */
 
-import MapLRU from '../index.es.js'
 import assert from 'assert'
+import MapLRU from '../src/index.js'
 
-// const MapLRU = require('../index.js').default
+/// needs renaming to *.cjs
 // const assert = require('assert')
+// const MapLRU = require('..')
 
 describe('#MapLRU', function () {
   it('should throw with TypeError', function () {

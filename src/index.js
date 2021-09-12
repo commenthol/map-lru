@@ -18,8 +18,7 @@ export default class MapLRU {
   _move (pointer) {
     const oldHead = this._head
 
-    if (oldHead === pointer)
-      return
+    if (oldHead === pointer) { return }
 
     const prev = this._prev[pointer]
     const next = this._next[pointer]
@@ -124,8 +123,7 @@ export default class MapLRU {
   delete (key) {
     const pointer = this._pointers.get(key)
 
-    if (typeof pointer === 'undefined')
-      return false
+    if (typeof pointer === 'undefined') { return false }
 
     const next = this._next[pointer]
     const prev = this._prev[pointer]
