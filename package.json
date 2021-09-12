@@ -40,7 +40,7 @@
     "build": "rollup -c",
     "clean": "rimraf index.js coverage .nyc_output node_modules",
     "coverage": "c8 -r text -r html mocha",
-    "coveralls": "npm test && nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "npm test && c8 report --reporter=text-lcov | coveralls",
     "lint": "standard -v --fix **/*.js",
     "prepublishOnly": "npm run build",
     "test": "c8 -r text mocha"
