@@ -3,7 +3,7 @@
 > "Least Recently Used" (LRU) cache compatible to ES6 Map
 
 [![NPM version](https://badge.fury.io/js/map-lru.svg)](https://www.npmjs.com/package/map-lru/)
-[![Build Status](https://travis-ci.org/commenthol/map-lru.svg?branch=master)](https://travis-ci.org/commenthol/map-lru)
+[![Build Status](https://app.travis-ci.com/commenthol/map-lru.svg?branch=master)](https://app.travis-ci.com/commenthol/map-lru)
 [![Coverage Status](https://coveralls.io/repos/github/commenthol/map-lru/badge.svg?branch=master)](https://coveralls.io/github/commenthol/map-lru?branch=master)
 
 Useful for caching with limited memory usage.
@@ -19,7 +19,7 @@ $ npm install map-lru
 
 ```js
 import MapLRU from 'map-lru' // ES5
-// const MapLRU = require('map-lru').default // commonJs
+// const MapLRU = require('map-lru') // commonJs
 const cache = new MapLRU(10)
 
 cache.set('♥', '♥♥♥')

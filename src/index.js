@@ -1,9 +1,9 @@
 
 export default class MapLRU {
   /**
-  * @constructor
-  * @param {Number} maxSize - max. size of the LRU cache
-  */
+   * @constructor
+   * @param {Number} maxSize - max. size of the LRU cache
+   */
   constructor (maxSize) {
     if (typeof maxSize !== 'number') throw TypeError('maxSize needs to be a number')
 
@@ -18,8 +18,7 @@ export default class MapLRU {
   _move (pointer) {
     const oldHead = this._head
 
-    if (oldHead === pointer)
-      return
+    if (oldHead === pointer) { return }
 
     const prev = this._prev[pointer]
     const next = this._next[pointer]
@@ -37,23 +36,23 @@ export default class MapLRU {
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/size
+   */
   get size () {
     return this._size
   }
 
   /**
-  * returns the last accessed key
-  * @return {Any}
-  */
+   * returns the last accessed key
+   * @return {Any}
+   */
   get last () {
     return this._lastKey
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get
+   */
   get (key) {
     const pointer = this._pointers.get(key)
 
@@ -65,9 +64,9 @@ export default class MapLRU {
   }
 
   /**
-  * Get an item without marking it as recently used
-  * @param {Any} key
-  */
+   * Get an item without marking it as recently used
+   * @param {Any} key
+   */
   peek (key) {
     const pointer = this._pointers.get(key)
 
@@ -78,8 +77,8 @@ export default class MapLRU {
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set
+   */
   set (key, value) {
     let pointer = this._pointers.get(key)
     this._lastKey = key
@@ -108,8 +107,8 @@ export default class MapLRU {
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/clear
+   */
   clear () {
     this._size = 0
     this._head = 0
@@ -119,13 +118,12 @@ export default class MapLRU {
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete
+   */
   delete (key) {
     const pointer = this._pointers.get(key)
 
-    if (typeof pointer === 'undefined')
-      return false
+    if (typeof pointer === 'undefined') { return false }
 
     const next = this._next[pointer]
     const prev = this._prev[pointer]
@@ -139,23 +137,23 @@ export default class MapLRU {
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has
+   */
   has (key) {
     return this._pointers.has(key)
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys
+   */
   keys () {
     return this._pointers.keys()
   }
 
   /**
-  * keys in order of access - last one is most recently used one
-  * @return {Iterator} Iterator object
-  */
+   * keys in order of access - last one is most recently used one
+   * @return {Iterator} Iterator object
+   */
   keysAccessed () {
     const keys = new Set()
     if (this._size) {
@@ -170,15 +168,15 @@ export default class MapLRU {
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values
+   */
   values () {
     return this._map.values()
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries
+   */
   entries () {
     return this._map.entries()
   }
@@ -189,8 +187,8 @@ export default class MapLRU {
   }
 
   /**
-  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/@@iterator
-  */
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/@@iterator
+   */
   [Symbol.iterator] () {
     return this._map[Symbol.iterator]()
   }
