@@ -1,6 +1,6 @@
 {
   "name": "map-lru",
-  "version": "2.1.0-0",
+  "version": "2.1.0",
   "description": "\"Least Recently Used\" (LRU) cache compatible to ES6 Map",
   "keywords": [
     "cache",
