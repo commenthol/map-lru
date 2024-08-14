@@ -125,6 +125,23 @@ describe('#MapLRU', function () {
     assert.deepStrictEqual([...cache.keysAccessed()], ['a'])
   })
 
+  it('should return keys accessed #2', function () {
+    const cache = new MapLRU(3)
+    cache.set('a', 1)
+    cache.set('b', 2)
+    cache.set('c', 2)
+    cache.get('c')
+    cache.get('b')
+    const iter = cache.keysAccessed()
+    const arr = []
+    for (;;) {
+      const { value, done } = iter.next()
+      if (done) break
+      arr.push(value)
+    }
+    assert.deepStrictEqual(arr, ['a', 'c', 'b'])
+  })
+
   it('should drop last used entry', function () {
     const cache = new MapLRU(3)
     cache.set('a', 1)

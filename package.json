@@ -1,6 +1,6 @@
 {
   "name": "map-lru",
-  "version": "2.0.0",
+  "version": "2.1.0-0",
   "description": "\"Least Recently Used\" (LRU) cache compatible to ES6 Map",
   "keywords": [
     "cache",
@@ -27,23 +27,30 @@
     "./package.json": "./package.json",
     ".": {
       "import": "./src/index.js",
-      "require": "./lib/index.cjs"
+      "require": "./lib/index.cjs",
+      "types": "./types/index.d.ts"
     }
   },
-  "main": "lib/index.cjs",
-  "module": "src/index.js",
+  "main": "./lib/index.cjs",
+  "module": "./src/index.js",
+  "types": "./types/index.d.ts",
   "directories": {
     "test": "test"
   },
+  "files": [
+    "lib",
+    "src",
+    "types"
+  ],
   "scripts": {
-    "all": "npm run lint && npm run build && npm run test",
+    "all": "npm-run-all clean lint build test types",
     "build": "rollup -c",
-    "clean": "rimraf index.js coverage .nyc_output node_modules",
+    "clean": "rimraf coverage types",
     "coverage": "c8 -r text -r html mocha",
     "coveralls": "npm test && c8 report --reporter=text-lcov | coveralls",
     "lint": "standard -v --fix **/*.js",
-    "prepublishOnly": "npm run build",
-    "test": "c8 -r text mocha"
+    "test": "c8 -r text mocha",
+    "types": "tsc"
   },
   "babel": {
     "presets": [
@@ -58,8 +65,11 @@
     "c8": "^10.1.2",
     "coveralls": "^3.1.1",
     "mocha": "^10.7.3",
+    "npm-run-all2": "^6.2.2",
+    "rimraf": "^6.0.1",
     "rollup": "^4.20.0",
-    "standard": "^17.1.0"
+    "standard": "^17.1.0",
+    "typescript": "^5.5.4"
   },
   "engines": {
     "node": ">=12"
